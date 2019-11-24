@@ -1,0 +1,13 @@
+{% extends "bank/bank_base.html" %}
+{% load bootstrap4 %}
+
+{% block bank %}
+<div class="container">
+    <h4> Make a Cash Call </h4>
+    <form method="post" id="postForm">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary" value="Cash Call">
+    </form>
+</div>
+{% endblock %}

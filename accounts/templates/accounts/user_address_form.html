@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block body %}
+<div class="container">
+    <h4> Create a new group </h4>
+    <form action="{% url 'accounts:create_address' %}" method="post" id="postForm">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary" value="Save">
+    </form>
+</div>
+{% endblock %}

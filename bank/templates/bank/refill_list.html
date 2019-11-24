@@ -1,0 +1,39 @@
+{% extends "bank/bank_base.html" %}
+
+{% block bank %}
+<div class="container">
+    <div class="container">
+    <div class="col-md-8">
+        <div class="list-group">
+            <h1>Your deposits</h1>
+            {% if refill_list %}
+            <table class="table">
+                <thead class="thead-light">
+                     <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Current balance</th>
+                        <th scope="col">Previous balance</th>
+                        <th scope="col">Date</th>
+                     </tr>
+                </thead>
+                <tbody>
+            {% for refill in refill_list %}
+             <tr>
+                <td>{{ refill.user.full_name }}</td>
+                <td>{{ refill.amount }}</td>
+                <td>{{ refill.current_balance }}</td>
+                <td>{{ refill.previous_balance }}</td>
+                <td>{{ refill.date_deposited }}</td>
+             </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No refill</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>
+    {% endblock %}

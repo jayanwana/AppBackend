@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>cash call</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Welcome {{user.full_name}}</h1>
+    <p>Current balance: N{{ user_balance }}</p>
+    <p><a class="nav-link" href="{% url 'bank:refill' %}">refill list</a>
+    <a class="nav-link" href="{% url 'bank:cash_call' %}">cash_call list</a>
+    <a class="nav-link" href="{% url 'bank:create_refill' %}">refill</a>
+    <a class="nav-link" href="{% url 'bank:create_cash_call' %}">cash call</a></p>
+    {% block bank %}
+    {% endblock %}
+{% endblock %}
