@@ -16,17 +16,28 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
+from django.conf.urls.static import static
+from rest_framework_simplejwt import views as jwt_views
 from . import views
+from .router import router
+from accounts.api.viewsets import UserRegistrationAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('', views.HomePage.as_view(), name='home'),
-    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('', views.SwaggerSchemaView.as_view(), name='swaggerapi'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('thanks/', views.ThanksPage.as_view(), name='thanks'),
-    path('bank/', include('bank.urls', namespace='bank')),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls')),
+    path("register/", UserRegistrationAPIView.as_view(), name="register_user"),
+    # path('', views.HomePage.as_view(), name='home'),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     # path('groups/', include('groups.urls', namespace='groups')),
-]
+    # path('accounts/', include('accounts.urls', namespace='accounts')),
+    # path('bank/', include('bank.urls', namespace='bank')),
+] + static(settings.STATIC_URL)
+
 
 if settings.DEBUG:
     import debug_toolbar

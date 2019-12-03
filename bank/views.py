@@ -15,7 +15,7 @@ class ContentMixin(generic.base.ContextMixin):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
+        # Add in a QuerySet of the user balance
         user = self.request.user
         context['user_balance'] = user.user_balance.get().balance
         return context
@@ -47,13 +47,7 @@ class CreateRefillView(LoginRequiredMixin, generic.CreateView, ContentMixin):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
-        balance = self.object.user.user_balance.get()
-        self.object.previous_balance = balance.balance
-        balance.balance += self.object.amount
-        balance.save()
-        self.object.current_balance = balance.balance
         response = super().form_valid(form)
-        self.object.save()
         messages.success(request=self.request, message='You Have deposited {}'.format(self.object.amount))
         return response
 
@@ -69,12 +63,6 @@ class CreateCashCallView(LoginRequiredMixin, generic.CreateView, ContentMixin):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
-        balance = self.object.user.user_balance.get()
-        self.object.previous_balance = balance.balance
-        balance.balance -= self.object.amount
-        balance.save()
-        self.object.current_balance = balance.balance
         response = super().form_valid(form)
-        self.object.save()
         messages.success(request=self.request, message='You Have withdrawn {}'.format(self.object.amount))
         return response
