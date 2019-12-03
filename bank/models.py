@@ -11,7 +11,10 @@ User = settings.AUTH_USER_MODEL
 
 
 class Refill(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    """
+    Model to handle Deposits, address is included to match cash call model
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='refill')
     address = models.ForeignKey(UserAddress, on_delete=models.CASCADE, null=True)
     amount = models.DecimalField(
         decimal_places=2,
@@ -26,15 +29,12 @@ class Refill(models.Model):
         blank=True,
         decimal_places=2,
         max_digits=9,
-        validators=[MinValueValidator(float('10.00'))])
+        )
     previous_balance = models.DecimalField(
         null=True,
         blank=True,
         decimal_places=2,
         max_digits=9,
-        validators=[
-            MinValueValidator(float('10.00'))
-        ]
     )
 
     def __str__(self):
@@ -44,6 +44,7 @@ class Refill(models.Model):
         return reverse('bank:refill')
 
     def save(self, *args, **kwargs):
+        """Save the transaction details and update the users balance"""
         with transaction.atomic():
             balance = self.user.user_balance.get()
             self.previous_balance = balance.balance
@@ -54,11 +55,13 @@ class Refill(models.Model):
 
     class Meta:
         ordering = ['-date_deposited']
-        # unique_together = ['user', 'message']
 
 
 class CashCall(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    """
+    Model to handle Withdrawals
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cash_call')
     address = models.ForeignKey(UserAddress, on_delete=models.CASCADE, null=True)
     amount = models.DecimalField(
         decimal_places=2,
@@ -73,13 +76,13 @@ class CashCall(models.Model):
         blank=True,
         decimal_places=2,
         max_digits=9,
-        validators=[MinValueValidator(float('10.00'))])
+        )
     previous_balance = models.DecimalField(
         null=True,
         blank=True,
         decimal_places=2,
         max_digits=9,
-        validators=[MinValueValidator(float('10.00'))])
+        )
 
     def __str__(self):
         return f'{self.user} Cash Call {self.pk}'

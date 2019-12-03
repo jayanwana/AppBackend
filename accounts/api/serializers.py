@@ -15,6 +15,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "full_name", "email", "password", "confirm_password", "date_joined")
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -24,6 +25,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
     def validate(self, attrs):
+        """ Make sure Passwords match"""
         if attrs.get('password') != attrs.get('confirm_password'):
             raise serializers.ValidationError("Those passwords don't match.")
         return attrs
@@ -44,22 +46,24 @@ class UserBalanceSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     user_balance = serializers.SerializerMethodField('get_user_balance')
+    refill = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='refill-detail')
+    cash_call = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='cashcall-detail')
 
     class Meta:
         model = User
-        fields = ['url', 'id', 'email', 'full_name', 'user_balance', 'date_joined']
-        read_only_fields = ['id', 'email', 'full_name', 'date_joined', 'is_active', 'user_balance']
+        fields = ['url', 'id', 'email', 'full_name', 'user_balance', 'date_joined', 'refill', 'cash_call']
+        read_only_fields = ['email', 'full_name', 'is_active', 'user_balance']
 
     def get_user_balance(self, obj):
         user = obj
         return user.user_balance.get().balance
 
 
-class UserAddressSerializer(serializers.ModelSerializer):
+class UserAddressSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
 
     class Meta:
         model = UserAddress
-        fields = ['user', 'street_address', 'city', 'state', 'country']
+        fields = ['user', 'url', 'street_address', 'city', 'state', 'country']

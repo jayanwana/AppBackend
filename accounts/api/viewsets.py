@@ -6,13 +6,12 @@ from .serializers import UserSerializer, UserRegistrationSerializer, UserAddress
 from accounts.models import User, UserAddress
 
 
-class IsOwnerOrAdmin(BasePermission):
+class IsUserOrAdmin(BasePermission):
     """
     Custom permission to give users access to their detailview.
     Admin users however have access to all.
     """
     def has_object_permission(self, request, view, obj):
-        # Permissions are only allowed to the owner of the snippet
         if request.user.is_staff:
             return True
         return obj == request.user
@@ -21,7 +20,7 @@ class IsOwnerOrAdmin(BasePermission):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsOwnerOrAdmin,)
+    permission_classes = (IsUserOrAdmin,)
 
     def get_queryset(self):
         """
@@ -35,11 +34,18 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserRegistrationAPIView(viewsets.generics.CreateAPIView):
+    """
+    Create a new User
+    """
     authentication_classes = ()
     permission_classes = ()
     serializer_class = UserRegistrationSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+        create a token whenever a user is registered
+        :return:
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -52,6 +58,9 @@ class UserRegistrationAPIView(viewsets.generics.CreateAPIView):
 
 
 class UserAddressViewSet(viewsets.ModelViewSet):
+    """
+    User Address Model
+    """
     queryset = UserAddress.objects.all()
     serializer_class = UserAddressSerializer
     permission_classes = [IsAuthenticated]

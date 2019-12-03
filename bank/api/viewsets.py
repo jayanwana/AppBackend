@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class RefillViewSet(viewsets.ModelViewSet):
+    """Generate refill create, list and detail view"""
     queryset = Refill.objects.all()
     serializer_class = RefillSerializer
     permission_classes = (IsAuthenticated,)
@@ -17,6 +18,7 @@ class RefillViewSet(viewsets.ModelViewSet):
 
 
 class CashCallViewSet(viewsets.ModelViewSet):
+    """Generate Cash Call create, list and detail view"""
     queryset = CashCall.objects.all()
     serializer_class = CashCallSerializer
     permission_classes = (IsAuthenticated,)
