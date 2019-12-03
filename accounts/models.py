@@ -3,11 +3,12 @@ from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
+from django.utils.functional import cached_property
 # Create your accounts models here.
 
 
 class UserManager(BaseUserManager):
-    """Define a model manager for User model with no username field."""
+    """Defines a model manager for User model."""
 
     use_in_migrations = True
 
@@ -58,11 +59,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+        ordering = ['date_joined']
 
     def __str__(self):
         return self.full_name
 
-    @property
+    @cached_property
     def balance(self):
         if hasattr(self, 'user_balance'):
             return self.user_balance.balance
@@ -70,14 +72,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserBalance(models.Model):
+    """A model for the users balance"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_balance')
     balance = models.DecimalField(default=0, max_digits=12, decimal_places=2)
 
     def __str__(self):
-        return str(self.user.full_name)
+        return str(self.balance)
+
+    def __unicode__(self):
+        return str(self.balance)
 
 
 class UserAddress(models.Model):
+    """ An address model with a many to one relationship with the user"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='address')
     street_address = models.CharField(max_length=128)
     city = models.CharField(max_length=64)
@@ -87,5 +94,10 @@ class UserAddress(models.Model):
     def __str__(self):
         return self.street_address
 
-    def get_absolute_url(self):
-        return reverse('home', kwargs={})
+    # def get_absolute_url(self):
+    #     return reverse('home', kwargs={})
+
+    class Meta:
+        """for django admin"""
+        verbose_name = _('user address')
+        verbose_name_plural = _('user addresses')

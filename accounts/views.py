@@ -18,8 +18,6 @@ class SignUp(CreateView):
         self.object = form.save(commit=False)
         response = super().form_valid(form)
         form.save()
-        balance = UserBalance.objects.create(user=self.object)
-        balance.save()
         return response
 
 

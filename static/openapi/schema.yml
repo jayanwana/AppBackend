@@ -1,0 +1,659 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /api/refill/:
+    get:
+      operationId: listRefills
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    amount:
+                      type: number
+                      multipleOf: 0.01
+                      maximum: 10000000000
+                      minimum: 10.0
+                    previous_balance:
+                      type: number
+                      multipleOf: 0.01
+                      maximum: 10000000000
+                      minimum: -10000000000
+                      readOnly: true
+                    current_balance:
+                      type: number
+                      multipleOf: 0.01
+                      maximum: 10000000000
+                      minimum: -10000000000
+                      readOnly: true
+                    date_deposited:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                  required:
+                  - amount
+          description: ''
+    post:
+      operationId: createRefill
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                amount:
+                  type: number
+                  multipleOf: 0.01
+                  maximum: 10000000000
+                  minimum: 10.0
+              required:
+              - amount
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  amount:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: 10.0
+                  previous_balance:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: -10000000000
+                    readOnly: true
+                  current_balance:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: -10000000000
+                    readOnly: true
+                  date_deposited:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                required:
+                - amount
+          description: ''
+  /api/refill/{id}/:
+    get:
+      operationId: retrieveRefill
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this refill.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  amount:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: 10.0
+                  previous_balance:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: -10000000000
+                    readOnly: true
+                  current_balance:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: -10000000000
+                    readOnly: true
+                  date_deposited:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                required:
+                - amount
+          description: ''
+  /api/cash_call/:
+    get:
+      operationId: listCashCalls
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    amount:
+                      type: number
+                      multipleOf: 0.01
+                      maximum: 10000000000
+                      minimum: 10.0
+                    address:
+                      type: string
+                      readOnly: true
+                    previous_balance:
+                      type: number
+                      multipleOf: 0.01
+                      maximum: 10000000000
+                      minimum: -10000000000
+                      readOnly: true
+                    current_balance:
+                      type: number
+                      multipleOf: 0.01
+                      maximum: 10000000000
+                      minimum: -10000000000
+                      readOnly: true
+                    date_deposited:
+                      type: string
+                      format: date-time
+                      readOnly: true
+                  required:
+                  - amount
+          description: ''
+    post:
+      operationId: createCashCall
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                amount:
+                  type: number
+                  multipleOf: 0.01
+                  maximum: 10000000000
+                  minimum: 10.0
+              required:
+              - amount
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  amount:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: 10.0
+                  address:
+                    type: string
+                    readOnly: true
+                  previous_balance:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: -10000000000
+                    readOnly: true
+                  current_balance:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: -10000000000
+                    readOnly: true
+                  date_deposited:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                required:
+                - amount
+          description: ''
+  /api/cash_call/{id}/:
+    get:
+      operationId: retrieveCashCall
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this cash call.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  amount:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: 10.0
+                  address:
+                    type: string
+                    readOnly: true
+                  previous_balance:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: -10000000000
+                    readOnly: true
+                  current_balance:
+                    type: number
+                    multipleOf: 0.01
+                    maximum: 10000000000
+                    minimum: -10000000000
+                    readOnly: true
+                  date_deposited:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                required:
+                - amount
+          description: ''
+  /api/user/:
+    get:
+      operationId: listUsers
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    email:
+                      type: string
+                      format: email
+                      readOnly: true
+                    full_name:
+                      type: string
+                      readOnly: true
+                    user_balance:
+                      type: string
+                      readOnly: true
+                    date_joined:
+                      type: string
+                      format: date-time
+                      readOnly: true
+          description: ''
+  /api/user/{id}/:
+    get:
+      operationId: retrieveUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  email:
+                    type: string
+                    format: email
+                    readOnly: true
+                  full_name:
+                    type: string
+                    readOnly: true
+                  user_balance:
+                    type: string
+                    readOnly: true
+                  date_joined:
+                    type: string
+                    format: date-time
+                    readOnly: true
+          description: ''
+  /api/address/:
+    get:
+      operationId: listUserAddress
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    street_address:
+                      type: string
+                      maxLength: 128
+                    city:
+                      type: string
+                      maxLength: 64
+                    state:
+                      type: string
+                      maxLength: 64
+                    country:
+                      type: string
+                      maxLength: 64
+                  required:
+                  - street_address
+                  - city
+                  - state
+                  - country
+          description: ''
+    post:
+      operationId: createUserAddress
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                street_address:
+                  type: string
+                  maxLength: 128
+                city:
+                  type: string
+                  maxLength: 64
+                state:
+                  type: string
+                  maxLength: 64
+                country:
+                  type: string
+                  maxLength: 64
+              required:
+              - street_address
+              - city
+              - state
+              - country
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  street_address:
+                    type: string
+                    maxLength: 128
+                  city:
+                    type: string
+                    maxLength: 64
+                  state:
+                    type: string
+                    maxLength: 64
+                  country:
+                    type: string
+                    maxLength: 64
+                required:
+                - street_address
+                - city
+                - state
+                - country
+          description: ''
+  /api/address/{id}/:
+    get:
+      operationId: retrieveUserAddress
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user address.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  street_address:
+                    type: string
+                    maxLength: 128
+                  city:
+                    type: string
+                    maxLength: 64
+                  state:
+                    type: string
+                    maxLength: 64
+                  country:
+                    type: string
+                    maxLength: 64
+                required:
+                - street_address
+                - city
+                - state
+                - country
+          description: ''
+    put:
+      operationId: updateUserAddress
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user address.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                street_address:
+                  type: string
+                  maxLength: 128
+                city:
+                  type: string
+                  maxLength: 64
+                state:
+                  type: string
+                  maxLength: 64
+                country:
+                  type: string
+                  maxLength: 64
+              required:
+              - street_address
+              - city
+              - state
+              - country
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  street_address:
+                    type: string
+                    maxLength: 128
+                  city:
+                    type: string
+                    maxLength: 64
+                  state:
+                    type: string
+                    maxLength: 64
+                  country:
+                    type: string
+                    maxLength: 64
+                required:
+                - street_address
+                - city
+                - state
+                - country
+          description: ''
+    patch:
+      operationId: partial_updateUserAddress
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user address.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                street_address:
+                  type: string
+                  maxLength: 128
+                city:
+                  type: string
+                  maxLength: 64
+                state:
+                  type: string
+                  maxLength: 64
+                country:
+                  type: string
+                  maxLength: 64
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  street_address:
+                    type: string
+                    maxLength: 128
+                  city:
+                    type: string
+                    maxLength: 64
+                  state:
+                    type: string
+                    maxLength: 64
+                  country:
+                    type: string
+                    maxLength: 64
+                required:
+                - street_address
+                - city
+                - state
+                - country
+          description: ''
+    delete:
+      operationId: destroyUserAddress
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user address.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+  /login/:
+    post:
+      operationId: CreateObtainAuthToken
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  writeOnly: true
+                  maxLength: 100
+                  minLength: 8
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  email:
+                    type: string
+                    format: email
+                  password:
+                    type: string
+                    writeOnly: true
+                    maxLength: 100
+                    minLength: 8
+                required:
+                  - email
+                  - password
+          description: 'Enter Email Address and Password'
+  /register/:
+    post:
+      operationId: CreateUserRegistration
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                full_name:
+                  type: string
+                  maxLength: 32
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  writeOnly: true
+                  maxLength: 100
+                  minLength: 8
+                confirm_password:
+                  type: string
+                  writeOnly: true
+                  maxLength: 100
+                  minLength: 8
+              required:
+              - full_name
+              - email
+              - password
+              - confirm_password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  full_name:
+                    type: string
+                    maxLength: 32
+                  email:
+                    type: string
+                    format: email
+                  date_joined:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                required:
+                - full_name
+                - email
+          description: ''
