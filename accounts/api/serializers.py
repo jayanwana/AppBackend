@@ -2,7 +2,6 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.hashers import make_password
 from accounts.models import User, UserBalance, UserAddress
-from django_dbcache_fields.decorators import dbcache
 from django.db import models
 
 
