@@ -7,8 +7,3 @@ from django.dispatch import receiver
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserBalance.objects.create(user=instance)
-
-
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.user_balance.save()

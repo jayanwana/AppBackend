@@ -18,6 +18,13 @@ class IsUserOrAdmin(BasePermission):
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    retrieve:
+        Return the a particular User.
+
+    list:
+        Return a list of all Users if Admin User.
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsUserOrAdmin,)
@@ -30,12 +37,12 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if self.request.user.is_staff:
             return self.queryset
         else:
-            return User.objects.filter(id=self.request.user.id)
+            return self.queryset.filter(id=self.request.user.id)
 
 
 class UserRegistrationAPIView(viewsets.generics.CreateAPIView):
     """
-    Create a new User
+    User Registration Form API View. Creates new instances of the User model
     """
     authentication_classes = ()
     permission_classes = ()
@@ -43,8 +50,7 @@ class UserRegistrationAPIView(viewsets.generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """
-        create a token whenever a user is registered
-        :return:
+        New User registration Form
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -59,11 +65,27 @@ class UserRegistrationAPIView(viewsets.generics.CreateAPIView):
 
 class UserAddressViewSet(viewsets.ModelViewSet):
     """
-    User Address Model
+    retrieve:
+        Return a particular address of a User.
+
+    list:
+        Return a list of all addresses of a user.
+
+    create:
+        Add a new Address.
+
+    destroy:
+        Delete an Address.
+
+    update:
+        Update an Address.
+
+    partial_update:
+        Update an Address.
     """
     queryset = UserAddress.objects.all()
     serializer_class = UserAddressSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         queryset = self.queryset

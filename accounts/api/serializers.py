@@ -2,22 +2,35 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.hashers import make_password
 from accounts.models import User, UserBalance, UserAddress
-from django_dbcache_fields.decorators import dbcache
-from django.db import models
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
-    full_name = serializers.CharField(max_length=32,)
-    password = serializers.CharField(min_length=8, max_length=100, write_only=True)
-    confirm_password = serializers.CharField(min_length=8, max_length=100, write_only=True)
+    """
+    User Registration Form. Creates new instances of the User model
+    """
+    email = serializers.EmailField(required=True,
+                                   help_text='User Email Address. Required in email format',
+                                   validators=[UniqueValidator(queryset=User.objects.all())])
+    full_name = serializers.CharField(max_length=32,
+                                      help_text='Full name of the User',)
+    password = serializers.CharField(min_length=8, max_length=100,
+                                     write_only=True, help_text='User Password, must be at least 8characters',
+                                     style={'input_type': 'password'})
+    confirm_password = serializers.CharField(min_length=8, max_length=100,
+                                             help_text='Re-enter password for confirmation',
+                                             write_only=True, style={'input_type': 'password'})
 
     class Meta:
         model = User
-        fields = ("id", "full_name", "email", "password", "confirm_password", "date_joined")
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ("id", "full_name", "email",
+                  "password", "confirm_password", "date_joined")
 
     def create(self, validated_data):
+        """
+        Create an instance of the user model
+        :param validated_data:
+        :return:
+        """
         user = User.objects.create(
             email=validated_data['email'],
             full_name=validated_data['full_name'],
@@ -32,6 +45,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 
 class UserBalanceSerializer(serializers.ModelSerializer):
+    """
+    User Wallet
+    """
     queryset = UserBalance.objects.all()
 
     def get_queryset(self):
@@ -45,13 +61,22 @@ class UserBalanceSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    user_balance = serializers.SerializerMethodField('get_user_balance')
-    refill = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='refill-detail')
-    cash_call = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='cashcall-detail')
+    """
+    Serializes thr User model and generates a url for each user
+    """
+    user_balance = serializers.SerializerMethodField('get_user_balance',
+                                                     help_text='Balance of the Users Wallet')
+    refill = serializers.HyperlinkedRelatedField(many=True, read_only=True,
+                                                 help_text='URL list of Deposits bys user',
+                                                 view_name='refill-detail')
+    cash_call = serializers.HyperlinkedRelatedField(many=True, read_only=True,
+                                                    help_text='URL list of Withdrawals bys user',
+                                                    view_name='cashcall-detail')
 
     class Meta:
         model = User
-        fields = ['url', 'id', 'email', 'full_name', 'user_balance', 'date_joined', 'refill', 'cash_call']
+        fields = ['url', 'id', 'email', 'full_name',
+                  'user_balance', 'date_joined', 'refill', 'cash_call']
         read_only_fields = ['email', 'full_name', 'is_active', 'user_balance']
 
     def get_user_balance(self, obj):
@@ -60,6 +85,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserAddressSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Serializer for the User Address model.
+    """
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )

@@ -1,13 +1,6 @@
-openapi: 3.0.2
 info:
-  title: ''
+  title: 'MUVE'
   version: ''
-securityDefinitions:
-  api_key:
-    type: apiKey
-    name: api_key
-    in: header
-    description: Requests should pass an api_key header.
 security:
  - api_key: []
 paths:
@@ -21,11 +14,6 @@ paths:
         description: A page number within the paginated result set.
         schema:
           type: integer
-      - name: auth
-        in: header
-        description: an authorization header
-        required: true
-        type: string
       responses:
         '200':
           content:
@@ -61,13 +49,13 @@ paths:
                           type: number
                           multipleOf: 0.01
                           maximum: 10000000
-                          minimum: -10000000
+                          minimum: 0.00
                           readOnly: true
                         current_balance:
                           type: number
                           multipleOf: 0.01
                           maximum: 10000000
-                          minimum: -10000000
+                          minimum: 0.00
                           readOnly: true
                         date_deposited:
                           type: string
@@ -75,7 +63,7 @@ paths:
                           readOnly: true
                       required:
                       - amount
-          description: ''
+          description: Return a list of all the users Deposits.
     post:
       operationId: createRefill
       parameters: []
@@ -126,7 +114,7 @@ paths:
                     readOnly: true
                 required:
                 - amount
-          description: ''
+          description: Make a new deposit.
   /api/refill/{id}/:
     get:
       operationId: retrieveRefill
@@ -134,7 +122,7 @@ paths:
       - name: id
         in: path
         required: true
-        description: A unique integer value identifying this refill.
+        description: A unique integer value identifying this Deposit.
         schema:
           type: string
       responses:
@@ -158,13 +146,13 @@ paths:
                     type: number
                     multipleOf: 0.01
                     maximum: 10000000
-                    minimum: -10000000
+                    minimum: 0.00
                     readOnly: true
                   current_balance:
                     type: number
                     multipleOf: 0.01
                     maximum: 10000000
-                    minimum: -10000000
+                    minimum: 0.00
                     readOnly: true
                   date_deposited:
                     type: string
@@ -172,7 +160,7 @@ paths:
                     readOnly: true
                 required:
                 - amount
-          description: ''
+          description: Return the given deposit
   /api/cash_call/:
     get:
       operationId: listCashCalls
@@ -235,7 +223,7 @@ paths:
                           readOnly: true
                       required:
                       - amount
-          description: ''
+          description: Return a list of all the users withdrawals.
     post:
       operationId: createCashCall
       parameters: []
@@ -249,6 +237,9 @@ paths:
                   multipleOf: 0.01
                   maximum: 10000000
                   minimum: 10.0
+                address:
+                  type: string
+                  maxLength: 128
               required:
               - amount
       responses:
@@ -275,13 +266,13 @@ paths:
                     type: number
                     multipleOf: 0.01
                     maximum: 10000000
-                    minimum: -10000000
+                    minimum: 0.00
                     readOnly: true
                   current_balance:
                     type: number
                     multipleOf: 0.01
                     maximum: 10000000
-                    minimum: -10000000
+                    minimum: 0.00
                     readOnly: true
                   date_deposited:
                     type: string
@@ -289,7 +280,7 @@ paths:
                     readOnly: true
                 required:
                 - amount
-          description: ''
+          description: Make a new withdrawal.
   /api/cash_call/{id}/:
     get:
       operationId: retrieveCashCall
@@ -338,7 +329,7 @@ paths:
                     readOnly: true
                 required:
                 - amount
-          description: ''
+          description: Return the given withdrawal.
   /api/user/:
     get:
       operationId: listUsers
@@ -399,7 +390,7 @@ paths:
                           items:
                             type: string
                           readOnly: true
-          description: ''
+          description: Return a list of all Users if Admin User.
   /api/user/{id}/:
     get:
       operationId: retrieveUser
@@ -446,7 +437,7 @@ paths:
                     items:
                       type: string
                     readOnly: true
-          description: ''
+          description: Return the particular User with the ID.
   /api/address/:
     get:
       operationId: listUserAddress
@@ -497,7 +488,7 @@ paths:
                       - city
                       - state
                       - country
-          description: ''
+          description: Return a list of all addresses of a user.
     post:
       operationId: createUserAddress
       parameters: []
@@ -549,7 +540,7 @@ paths:
                 - city
                 - state
                 - country
-          description: ''
+          description: Add a new Address.
   /api/address/{id}/:
     get:
       operationId: retrieveUserAddress
@@ -586,7 +577,7 @@ paths:
                 - city
                 - state
                 - country
-          description: ''
+          description: Return a particular address of a User.
     put:
       operationId: updateUserAddress
       parameters:
@@ -644,7 +635,7 @@ paths:
                 - city
                 - state
                 - country
-          description: ''
+          description: Update an Address.
     patch:
       operationId: partial_updateUserAddress
       parameters:
@@ -697,7 +688,7 @@ paths:
                 - city
                 - state
                 - country
-          description: ''
+          description: Update an Address.
     delete:
       operationId: destroyUserAddress
       parameters:
@@ -709,7 +700,7 @@ paths:
           type: string
       responses:
         '204':
-          description: ''
+          description: Delete an Address.
   /register/:
     post:
       operationId: CreateUserRegistration
@@ -762,7 +753,7 @@ paths:
                 required:
                 - full_name
                 - email
-          description: ''
+          description: New User registration Form
   /api/token/:
     post:
       operationId: CreateTokenObtainPair
@@ -790,7 +781,8 @@ paths:
                     type: string
                 required:
                 - email
-          description: ''
+          description: "Takes a set of user credentials and returns an access and refresh JSON web\n
+          token pair to prove the authentication of those credentials."
   /api/token/refresh/:
     post:
       operationId: CreateTokenRefresh
@@ -814,4 +806,5 @@ paths:
                     type: string
                 required:
                 - refresh
-          description: ''
+          description: 'Takes a refresh type JSON web token and returns an access type JSON web \n
+          token if the refresh token is valid.'

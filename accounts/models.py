@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.utils.functional import cached_property
 # Create your accounts models here.
@@ -101,3 +101,4 @@ class UserAddress(models.Model):
         """for django admin"""
         verbose_name = _('user address')
         verbose_name_plural = _('user addresses')
+        ordering = ['user']
