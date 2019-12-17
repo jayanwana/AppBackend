@@ -76,12 +76,18 @@ class CashCall(models.Model):
         blank=True,
         decimal_places=2,
         max_digits=9,
+        validators=[
+            MinValueValidator(float('0.00'))
+        ]
         )
     previous_balance = models.DecimalField(
         null=True,
         blank=True,
         decimal_places=2,
         max_digits=9,
+        validators=[
+            MinValueValidator(float('0.00'))
+        ]
         )
 
     def __str__(self):
@@ -95,9 +101,16 @@ class CashCall(models.Model):
             balance = self.user.user_balance.get()
             self.previous_balance = balance.balance
             balance.balance -= self.amount
-            balance.update()
+            balance.save()
             self.current_balance = balance.balance
             super().save(*args, **kwargs)
+
+    def get_user_address(self):
+        try:
+            address = [(u.id, u.street_address) for u in self.user.address.all()]
+        except AttributeError:
+            address = list(tuple())
+        return address
 
     class Meta:
         ordering = ['-date_deposited']

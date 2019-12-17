@@ -8,11 +8,12 @@ from rest_framework_swagger import renderers
 
 
 class SwaggerSchemaView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = ()
     renderer_classes = [
         renderers.OpenAPIRenderer,
         renderers.SwaggerUIRenderer
     ]
+    title = 'MUVE'
 
     def get(self, request):
         generator = SchemaGenerator()
