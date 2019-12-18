@@ -20,7 +20,7 @@ class IsUserOrAdmin(BasePermission):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     retrieve:
-        Return the a particular User.
+        Return the User matching the Id.
 
     list:
         Return a list of all Users if Admin User.

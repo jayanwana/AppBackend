@@ -1,810 +1,434 @@
+---
+swagger: "2.0"
 info:
-  title: 'MUVE'
-  version: ''
-security:
- - api_key: []
+  description: MUVE API
+  version: 1.0.0
+  title: MUVE
+host: 127.0.0.1:8000
+schemes:
+- http
 paths:
-  /api/refill/:
+  /:
     get:
-      operationId: listRefills
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                  previous:
-                    type: string
-                    nullable: true
-                  results:
-                    type: array
-                    items:
-                      properties:
-                        url:
-                          type: string
-                          readOnly: true
-                        id:
-                          type: integer
-                          readOnly: true
-                        amount:
-                          type: number
-                          multipleOf: 0.01
-                          maximum: 10000000
-                          minimum: 10.0
-                        previous_balance:
-                          type: number
-                          multipleOf: 0.01
-                          maximum: 10000000
-                          minimum: 0.00
-                          readOnly: true
-                        current_balance:
-                          type: number
-                          multipleOf: 0.01
-                          maximum: 10000000
-                          minimum: 0.00
-                          readOnly: true
-                        date_deposited:
-                          type: string
-                          format: date-time
-                          readOnly: true
-                      required:
-                      - amount
-          description: Return a list of all the users Deposits.
-    post:
-      operationId: createRefill
+      tags:
+      - ""
+      description: Open-API Schema
+      operationId: list
       parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                amount:
-                  type: number
-                  multipleOf: 0.01
-                  maximum: 10000000
-                  minimum: 10.0
-              required:
-              - amount
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  id:
-                    type: integer
-                    readOnly: true
-                  amount:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: 10.0
-                  previous_balance:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: -10000000
-                    readOnly: true
-                  current_balance:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: -10000000
-                    readOnly: true
-                  date_deposited:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                required:
-                - amount
-          description: Make a new deposit.
-  /api/refill/{id}/:
-    get:
-      operationId: retrieveRefill
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this Deposit.
-        schema:
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  id:
-                    type: integer
-                    readOnly: true
-                  amount:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: 10.0
-                  previous_balance:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: 0.00
-                    readOnly: true
-                  current_balance:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: 0.00
-                    readOnly: true
-                  date_deposited:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                required:
-                - amount
-          description: Return the given deposit
-  /api/cash_call/:
-    get:
-      operationId: listCashCalls
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                  previous:
-                    type: string
-                    nullable: true
-                  results:
-                    type: array
-                    items:
-                      properties:
-                        url:
-                          type: string
-                          readOnly: true
-                        id:
-                          type: integer
-                          readOnly: true
-                        amount:
-                          type: number
-                          multipleOf: 0.01
-                          maximum: 10000000
-                          minimum: 10.0
-                        address:
-                          type: string
-                          readOnly: true
-                        previous_balance:
-                          type: number
-                          multipleOf: 0.01
-                          maximum: 10000000
-                          minimum: -10000000
-                          readOnly: true
-                        current_balance:
-                          type: number
-                          multipleOf: 0.01
-                          maximum: 10000000
-                          minimum: -10000000
-                          readOnly: true
-                        date_deposited:
-                          type: string
-                          format: date-time
-                          readOnly: true
-                      required:
-                      - amount
-          description: Return a list of all the users withdrawals.
-    post:
-      operationId: createCashCall
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                amount:
-                  type: number
-                  multipleOf: 0.01
-                  maximum: 10000000
-                  minimum: 10.0
-                address:
-                  type: string
-                  maxLength: 128
-              required:
-              - amount
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  id:
-                    type: integer
-                    readOnly: true
-                  amount:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: 10.0
-                  address:
-                    type: string
-                    readOnly: true
-                  previous_balance:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: 0.00
-                    readOnly: true
-                  current_balance:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: 0.00
-                    readOnly: true
-                  date_deposited:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                required:
-                - amount
-          description: Make a new withdrawal.
-  /api/cash_call/{id}/:
-    get:
-      operationId: retrieveCashCall
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this cash call.
-        schema:
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  id:
-                    type: integer
-                    readOnly: true
-                  amount:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: 10.0
-                  address:
-                    type: string
-                    readOnly: true
-                  previous_balance:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: -10000000
-                    readOnly: true
-                  current_balance:
-                    type: number
-                    multipleOf: 0.01
-                    maximum: 10000000
-                    minimum: -10000000
-                    readOnly: true
-                  date_deposited:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                required:
-                - amount
-          description: Return the given withdrawal.
-  /api/user/:
-    get:
-      operationId: listUsers
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                  previous:
-                    type: string
-                    nullable: true
-                  results:
-                    type: array
-                    items:
-                      properties:
-                        url:
-                          type: string
-                          readOnly: true
-                        id:
-                          type: integer
-                          readOnly: true
-                        email:
-                          type: string
-                          format: email
-                          readOnly: true
-                        full_name:
-                          type: string
-                          readOnly: true
-                        user_balance:
-                          type: string
-                          readOnly: true
-                        date_joined:
-                          type: string
-                          format: date-time
-                          readOnly: true
-                        refill:
-                          type: array
-                          items:
-                            type: string
-                          readOnly: true
-                        cash_call:
-                          type: array
-                          items:
-                            type: string
-                          readOnly: true
-          description: Return a list of all Users if Admin User.
-  /api/user/{id}/:
-    get:
-      operationId: retrieveUser
-      parameters:
-      - name: id
-        in: path
-        required: true
-        description: A unique integer value identifying this user.
-        schema:
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  id:
-                    type: integer
-                    readOnly: true
-                  email:
-                    type: string
-                    format: email
-                    readOnly: true
-                  full_name:
-                    type: string
-                    readOnly: true
-                  user_balance:
-                    type: string
-                    readOnly: true
-                  date_joined:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                  refill:
-                    type: array
-                    items:
-                      type: string
-                    readOnly: true
-                  cash_call:
-                    type: array
-                    items:
-                      type: string
-                    readOnly: true
-          description: Return the particular User with the ID.
+        "200":
+          description: Open-API Schema
   /api/address/:
     get:
-      operationId: listUserAddress
+      tags:
+      - api
+      summary: Return a list of all addresses of a user.
+      description: Return a list of all addresses of a user.
+      operationId: address_list
       parameters:
       - name: page
-        required: false
         in: query
         description: A page number within the paginated result set.
-        schema:
-          type: integer
+        required: false
+        type: integer
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                  previous:
-                    type: string
-                    nullable: true
-                  results:
-                    type: array
-                    items:
-                      properties:
-                        url:
-                          type: string
-                          readOnly: true
-                        street_address:
-                          type: string
-                          maxLength: 128
-                        city:
-                          type: string
-                          maxLength: 64
-                        state:
-                          type: string
-                          maxLength: 64
-                        country:
-                          type: string
-                          maxLength: 64
-                      required:
-                      - street_address
-                      - city
-                      - state
-                      - country
-          description: Return a list of all addresses of a user.
+        "200":
+          description: ""
     post:
-      operationId: createUserAddress
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                street_address:
-                  type: string
-                  maxLength: 128
-                city:
-                  type: string
-                  maxLength: 64
-                state:
-                  type: string
-                  maxLength: 64
-                country:
-                  type: string
-                  maxLength: 64
-              required:
-              - street_address
-              - city
-              - state
-              - country
+      tags:
+      - api
+      summary: Add a new Address.
+      description: Add a new Address.
+      operationId: address_create
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        required: false
+        schema:
+          $ref: '#/definitions/data'
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  street_address:
-                    type: string
-                    maxLength: 128
-                  city:
-                    type: string
-                    maxLength: 64
-                  state:
-                    type: string
-                    maxLength: 64
-                  country:
-                    type: string
-                    maxLength: 64
-                required:
-                - street_address
-                - city
-                - state
-                - country
-          description: Add a new Address.
+        "201":
+          description: ""
   /api/address/{id}/:
     get:
-      operationId: retrieveUserAddress
+      tags:
+      - api
+      summary: Return a particular address of a User.
+      description: Return a particular address of a User.
+      operationId: address_read
       parameters:
       - name: id
         in: path
-        required: true
         description: A unique integer value identifying this user address.
-        schema:
-          type: string
+        required: true
+        type: integer
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  street_address:
-                    type: string
-                    maxLength: 128
-                  city:
-                    type: string
-                    maxLength: 64
-                  state:
-                    type: string
-                    maxLength: 64
-                  country:
-                    type: string
-                    maxLength: 64
-                required:
-                - street_address
-                - city
-                - state
-                - country
-          description: Return a particular address of a User.
+        "200":
+          description: Return a particular address that matches the ID
     put:
-      operationId: updateUserAddress
+      tags:
+      - api
+      summary: Update an Address.
+      description: Update an Address.
+      operationId: address_update
+      consumes:
+      - application/json
       parameters:
       - name: id
         in: path
-        required: true
         description: A unique integer value identifying this user address.
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                street_address:
-                  type: string
-                  maxLength: 128
-                city:
-                  type: string
-                  maxLength: 64
-                state:
-                  type: string
-                  maxLength: 64
-                country:
-                  type: string
-                  maxLength: 64
-              required:
-              - street_address
-              - city
-              - state
-              - country
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  street_address:
-                    type: string
-                    maxLength: 128
-                  city:
-                    type: string
-                    maxLength: 64
-                  state:
-                    type: string
-                    maxLength: 64
-                  country:
-                    type: string
-                    maxLength: 64
-                required:
-                - street_address
-                - city
-                - state
-                - country
-          description: Update an Address.
-    patch:
-      operationId: partial_updateUserAddress
-      parameters:
-      - name: id
-        in: path
         required: true
-        description: A unique integer value identifying this user address.
+        type: integer
+      - in: body
+        name: data
+        required: false
         schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                street_address:
-                  type: string
-                  maxLength: 128
-                city:
-                  type: string
-                  maxLength: 64
-                state:
-                  type: string
-                  maxLength: 64
-                country:
-                  type: string
-                  maxLength: 64
+          $ref: '#/definitions/data_1'
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    readOnly: true
-                  street_address:
-                    type: string
-                    maxLength: 128
-                  city:
-                    type: string
-                    maxLength: 64
-                  state:
-                    type: string
-                    maxLength: 64
-                  country:
-                    type: string
-                    maxLength: 64
-                required:
-                - street_address
-                - city
-                - state
-                - country
-          description: Update an Address.
+        "200":
+          description: ""
     delete:
-      operationId: destroyUserAddress
+      tags:
+      - api
+      summary: Delete an Address.
+      description: Delete an Address.
+      operationId: address_delete
       parameters:
       - name: id
         in: path
-        required: true
         description: A unique integer value identifying this user address.
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: ""
+    patch:
+      tags:
+      - api
+      summary: Update an Address.
+      description: Update an Address.
+      operationId: address_partial_update
+      consumes:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this user address.
+        required: true
+        type: integer
+      - in: body
+        name: data
+        required: false
         schema:
-          type: string
+          $ref: '#/definitions/data_2'
       responses:
-        '204':
-          description: Delete an Address.
-  /register/:
+        "200":
+          description: ""
+  /api/cash_call/:
+    get:
+      tags:
+      - api
+      summary: Return a list of all the users withdrawals.
+      description: Return a list of all the users withdrawals.
+      operationId: cash_call_list
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        "200":
+          description: ""
     post:
-      operationId: CreateUserRegistration
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                full_name:
-                  type: string
-                  maxLength: 32
-                email:
-                  type: string
-                  format: email
-                password:
-                  type: string
-                  writeOnly: true
-                  maxLength: 100
-                  minLength: 8
-                confirm_password:
-                  type: string
-                  writeOnly: true
-                  maxLength: 100
-                  minLength: 8
-              required:
-              - full_name
-              - email
-              - password
-              - confirm_password
+      tags:
+      - api
+      summary: Make a new withdrawal.
+      description: Make a new withdrawal.
+      operationId: cash_call_create
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        required: false
+        schema:
+          $ref: '#/definitions/data_3'
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  id:
-                    type: integer
-                    readOnly: true
-                  full_name:
-                    type: string
-                    maxLength: 32
-                  email:
-                    type: string
-                    format: email
-                  date_joined:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                required:
-                - full_name
-                - email
-          description: New User registration Form
+        "201":
+          description: ""
+  /api/cash_call/{id}/:
+    get:
+      tags:
+      - api
+      summary: Return the given withdrawal.
+      description: Return the given withdrawal.
+      operationId: cash_call_read
+      parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this cash call.
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Get details of a particular withdrawal
+  /api/refill/:
+    get:
+      tags:
+      - api
+      summary: Return a list of all users deposits.
+      description: Return a list of all users deposits.
+      operationId: refill_list
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        "200":
+          description: ""
+    post:
+      tags:
+      - api
+      summary: Make a new deposit.
+      description: Make a new deposit.
+      operationId: refill_create
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        required: false
+        schema:
+          $ref: '#/definitions/data_4'
+      responses:
+        "201":
+          description: ""
+  /api/refill/{id}/:
+    get:
+      tags:
+      - api
+      summary: Return the given deposit
+      description: Return the given deposit
+      operationId: refill_read
+      parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this refill.
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Get details of a particular Deposit
   /api/token/:
     post:
-      operationId: CreateTokenObtainPair
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
-                  writeOnly: true
-              required:
-              - email
-              - password
+      tags:
+      - api
+      summary: Takes a set of user credentials and returns an access and refresh JSON web
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      operationId: token_create
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        required: false
+        schema:
+          $ref: '#/definitions/data_5'
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  email:
-                    type: string
-                required:
-                - email
-          description: "Takes a set of user credentials and returns an access and refresh JSON web\n
-          token pair to prove the authentication of those credentials."
+        "201":
+          description: Create token pair to prove the authentication of those credentials.
   /api/token/refresh/:
     post:
-      operationId: CreateTokenRefresh
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                refresh:
-                  type: string
-              required:
-              - refresh
+      tags:
+      - api
+      summary: Takes a refresh type JSON web token and returns an access type JSON web
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      operationId: token_refresh_create
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        required: false
+        schema:
+          $ref: '#/definitions/data_6'
       responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                properties:
-                  refresh:
-                    type: string
-                required:
-                - refresh
-          description: 'Takes a refresh type JSON web token and returns an access type JSON web \n
-          token if the refresh token is valid.'
+        "201":
+          description: ""
+  /api/user/:
+    get:
+      tags:
+      - api
+      summary: Return a list of all Users if Admin User.
+      description: Return a list of all Users if Admin User.
+      operationId: user_list
+      parameters:
+      - name: page
+        in: query
+        description: A page number within the paginated result set.
+        required: false
+        type: integer
+      responses:
+        "200":
+          description: ""
+  /api/user/{id}/:
+    get:
+      tags:
+      - api
+      summary: Return the User matching the Id.
+      description: Return the User matching the Id.
+      operationId: user_read
+      parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this user.
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ""
+  /register/:
+    post:
+      tags:
+      - register
+      summary: New User registration Form
+      description: New User registration Form
+      operationId: create
+      consumes:
+      - application/json
+      parameters:
+      - in: body
+        name: data
+        required: false
+        schema:
+          $ref: '#/definitions/data_7'
+      responses:
+        "201":
+          description: New User Registration
+securityDefinitions:
+  basic:
+    type: basic
+definitions:
+  data_6:
+    type: object
+    required:
+    - refresh
+    properties:
+      refresh:
+        type: string
+        description: ""
+  data_5:
+    type: object
+    required:
+    - email
+    - password
+    properties:
+      email:
+        type: string
+        description: Users Email Address
+      password:
+        type: string
+        description: Users Password
+  data_7:
+    type: object
+    required:
+    - confirm_password
+    - email
+    - full_name
+    - password
+    properties:
+      full_name:
+        type: string
+        description: Full name of the User
+      email:
+        type: string
+        description: User Email Address. Required in email format
+      password:
+        type: string
+        description: User Password, must be at least 8characters
+      confirm_password:
+        type: string
+        description: Re-enter password for confirmation
+  data:
+    type: object
+    required:
+    - city
+    - country
+    - state
+    - street_address
+    properties:
+      street_address:
+        type: string
+        description: Users street address including house number
+      city:
+        type: string
+        description: City or Town of Residence
+      state:
+        type: string
+        description: State of Residence
+      country:
+        type: string
+        description: Country of Residence
+  data_2:
+    type: object
+    properties:
+      street_address:
+        type: string
+        description: ""
+      city:
+        type: string
+        description: ""
+      state:
+        type: string
+        description: ""
+      country:
+        type: string
+        description: ""
+  data_1:
+    type: object
+    required:
+    - city
+    - country
+    - state
+    - street_address
+    properties:
+      street_address:
+        type: string
+        description: ""
+      city:
+        type: string
+        description: ""
+      state:
+        type: string
+        description: ""
+      country:
+        type: string
+        description: ""
+  data_4:
+    type: object
+    required:
+    - amount
+    properties:
+      amount:
+        type: number
+        description: Deposit Amount
+  data_3:
+    type: object
+    required:
+    - amount
+    properties:
+      amount:
+        type: number
+        description: Withdrawal amount
+      address:
+        type: string
+        description: Address to be associated with withdrawal.
