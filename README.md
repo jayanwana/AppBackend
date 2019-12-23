@@ -24,7 +24,8 @@ Install requirements (use pip3 if pip doesn't work)
 pip install -r requirements.txt 
 ```
 
-Run migrations to create Database and models
+Run migrations to create Database and models<br/>
+(Replace "python" with "py" or "python3" if an error occurs) 
 ```
 python manage.py makemigrations
 python manage.py migrate
