@@ -28,7 +28,7 @@ SECRET_KEY = 'rx3yb&i%qcipp!c@y5(wl7r2!(d-k_s^e79u*l15)wi!kwonb^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["muve.com.ng", "api.muve.com.ng"]
 
 
 # Application definition
