@@ -44,7 +44,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """User model."""
     email = models.EmailField(_('email address'), unique=True)
-    full_name = models.CharField(_('full name'), max_length=30, blank=True)
+    full_name = models.CharField(_('full name'), max_length=64, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)

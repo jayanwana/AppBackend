@@ -11,12 +11,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True,
                                    help_text='User Email Address. Required in email format',
                                    validators=[UniqueValidator(queryset=User.objects.all())])
-    full_name = serializers.CharField(max_length=32,
+    full_name = serializers.CharField(max_length=64, required=True,
                                       help_text='Full name of the User',)
-    password = serializers.CharField(min_length=8, max_length=100,
+    password = serializers.CharField(min_length=8, max_length=100, required=True,
                                      write_only=True, help_text='User Password, must be at least 8characters',
                                      style={'input_type': 'password'})
-    confirm_password = serializers.CharField(min_length=8, max_length=100,
+    confirm_password = serializers.CharField(min_length=8, max_length=100, required=True,
                                              help_text='Re-enter password for confirmation',
                                              write_only=True, style={'input_type': 'password'})
 
@@ -24,6 +24,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id", "full_name", "email",
                   "password", "confirm_password", "date_joined")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].error_messages['required'] = 'Email is required'
+        self.fields['email'].error_messages['blank'] = 'Email cannot be blank'
+        self.fields['full_name'].error_messages['required'] = 'Full name is required'
+        self.fields['full_name'].error_messages['blank'] = 'Full name cannot be blank'
+        self.fields['password'].error_messages['required'] = 'Password is required'
+        self.fields["password"].error_messages["min_length"] = "password must be at least 8 characters"
 
     def create(self, validated_data):
         """
