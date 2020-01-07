@@ -17,13 +17,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 MEDIA_DIR = os.path.join(BASE_DIR, "media")
+SECRET_DIR = os.path.join(BASE_DIR, "secrets.txt")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rx3yb&i%qcipp!c@y5(wl7r2!(d-k_s^e79u*l15)wi!kwonb^'
+with open('secrets.txt') as f:
+    content = f.readlines()
+    security_key = content[0].strip()
+    user = content[1].strip()
+    password = content[2].strip()
+    SECRET_KEY = security_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -92,8 +98,12 @@ WSGI_APPLICATION = 'muvemoney.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'muve_db',
+        'USER': user.strip(),
+        'PASSWORD': password.strip(),
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -131,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    # 'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'EXCEPTION_HANDLER': ('accounts.exceptions.base_exception_handler',),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
