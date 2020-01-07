@@ -26,10 +26,10 @@ SECRET_DIR = os.path.join(BASE_DIR, "secrets.txt")
 # SECURITY WARNING: keep the secret key used in production secret!
 with open('secrets.txt') as f:
     content = f.readlines()
-    security_key = content[0].strip()
+    secret_key = content[0].strip()
     user = content[1].strip()
     password = content[2].strip()
-    SECRET_KEY = security_key
+    SECRET_KEY = secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -141,8 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
-    # 'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
-    'EXCEPTION_HANDLER': ('accounts.exceptions.base_exception_handler',),
+    # 'EXCEPTION_HANDLER': ('accounts.exceptions.base_exception_handler',),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
