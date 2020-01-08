@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
+    'django_rest_passwordreset',
     'corsheaders',
     # My Apps
     'accounts',
@@ -162,8 +163,8 @@ USE_TZ = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
 EMAIL_HOST_USER = 'muveapi@gmail.com'
 EMAIL_HOST_PASSWORD = 'muveadminpassword'
 

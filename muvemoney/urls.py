@@ -32,6 +32,7 @@ urlpatterns = [
     path('', views.SwaggerSchemaView.as_view(), name='swaggerapi'),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/password_reset/', include('django_rest_passwordreset.urls'), name='password_reset'),
     # path('', views.HomePage.as_view(), name='home'),
     # path('groups/', include('groups.urls', namespace='groups')),
     # path('accounts/', include('accounts.urls', namespace='accounts')),
