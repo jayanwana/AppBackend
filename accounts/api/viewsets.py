@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
@@ -40,7 +40,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             return self.queryset.filter(id=self.request.user.id)
 
 
-class UserRegistrationAPIView(viewsets.generics.CreateAPIView):
+class UserRegistrationAPIView(generics.CreateAPIView):
     """
     User Registration Form API View. Creates new instances of the User model
     """

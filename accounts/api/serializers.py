@@ -10,7 +10,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     """
     email = serializers.EmailField(required=True,
                                    help_text='User Email Address. Required in email format',
-                                   validators=[UniqueValidator(queryset=User.objects.all())])
+                                   validators=[UniqueValidator(queryset=User.objects.all(),
+                                                               message=
+                                                               "An account with this email already exists")])
     full_name = serializers.CharField(max_length=64, required=True,
                                       help_text='Full name of the User',)
     password = serializers.CharField(min_length=8, max_length=100, required=True,
@@ -29,6 +31,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         self.fields['email'].error_messages['required'] = 'Email is required'
         self.fields['email'].error_messages['blank'] = 'Email cannot be blank'
+        self.fields['email'].error_messages['unique'] = 'User with email already exists'
         self.fields['full_name'].error_messages['required'] = 'Full name is required'
         self.fields['full_name'].error_messages['blank'] = 'Full name cannot be blank'
         self.fields['password'].error_messages['required'] = 'Password is required'
