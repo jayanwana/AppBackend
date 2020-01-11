@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.password_validation import validate_password
 from accounts.models import User, UserBalance, UserAddress
 
 
@@ -31,7 +32,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         self.fields['email'].error_messages['required'] = 'Email is required'
         self.fields['email'].error_messages['blank'] = 'Email cannot be blank'
-        self.fields['email'].error_messages['unique'] = 'User with email already exists'
+        self.fields['email'].error_messages['unique'] = 'A User with this email address already exists'
         self.fields['full_name'].error_messages['required'] = 'Full name is required'
         self.fields['full_name'].error_messages['blank'] = 'Full name cannot be blank'
         self.fields['password'].error_messages['required'] = 'Password is required'
@@ -94,6 +95,24 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     def get_user_balance(self, obj):
         user = obj
         return user.user_balance.get().balance
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(min_length=8, max_length=100, required=True,
+                                         write_only=True,
+                                         help_text='User Password, must be at least 8characters',
+                                         style={'input_type': 'password'})
+    new_password = serializers.CharField(min_length=8, max_length=100, required=True,
+                                         write_only=True,
+                                         help_text='User Password, must be at least 8characters',
+                                         style={'input_type': 'password'})
+
+    def validate_new_password(self, value):
+        validate_password(value)
+        return value
 
 
 class UserAddressSerializer(serializers.HyperlinkedModelSerializer):

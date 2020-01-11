@@ -1,0 +1,756 @@
+{
+    "swagger": "2.0",
+    "openapi": "3.0",
+    "info": {
+        "title": "muveapi",
+        "description": "muve-money",
+        "version": "1.0.1"
+    },
+    "host": "127.0.0.1:8000",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "operationId": "list",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [],
+                "tags": [
+                    ""
+                ]
+            }
+        },
+        "/api/address/": {
+            "get": {
+                "operationId": "address_list",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Return a list of all addresses of a user.",
+                "summary": "Return a list of all addresses of a user.",
+                "tags": [
+                    "api"
+                ]
+            },
+            "post": {
+                "operationId": "address_create",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "street_address": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "city": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "state": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "country": {
+                                    "description": "",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "street_address",
+                                "city",
+                                "state",
+                                "country"
+                            ]
+                        }
+                    }
+                ],
+                "description": "Add a new Address.",
+                "summary": "Add a new Address.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/address/{id}/": {
+            "get": {
+                "operationId": "address_read",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "A unique integer value identifying this user address.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Return a particular address of a User.",
+                "summary": "Return a particular address of a User.",
+                "tags": [
+                    "api"
+                ]
+            },
+            "put": {
+                "operationId": "address_update",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "A unique integer value identifying this user address.",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "street_address": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "city": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "state": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "country": {
+                                    "description": "",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "street_address",
+                                "city",
+                                "state",
+                                "country"
+                            ]
+                        }
+                    }
+                ],
+                "description": "Update an Address.",
+                "summary": "Update an Address.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            },
+            "patch": {
+                "operationId": "address_partial_update",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "A unique integer value identifying this user address.",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "street_address": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "city": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "state": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "country": {
+                                    "description": "",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "description": "Update an Address.",
+                "summary": "Update an Address.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            },
+            "delete": {
+                "operationId": "address_delete",
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "A unique integer value identifying this user address.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Delete an Address.",
+                "summary": "Delete an Address.",
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/cash_call/": {
+            "get": {
+                "operationId": "cash_call_list",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Return a list of all the users withdrawals.",
+                "summary": "Return a list of all the users withdrawals.",
+                "tags": [
+                    "api"
+                ]
+            },
+            "post": {
+                "operationId": "cash_call_create",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "amount": {
+                                    "description": "",
+                                    "type": "number"
+                                },
+                                "address": {
+                                    "description": "",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "amount"
+                            ]
+                        }
+                    }
+                ],
+                "description": "Make a new withdrawal.",
+                "summary": "Make a new withdrawal.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/cash_call/{id}/": {
+            "get": {
+                "operationId": "cash_call_read",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "A unique integer value identifying this cash call.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Return the given withdrawal.",
+                "summary": "Return the given withdrawal.",
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/change_password/": {
+            "put": {
+                "operationId": "change_password_update",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "old_password": {
+                                    "description": "User Password, must be at least 8characters",
+                                    "type": "string"
+                                },
+                                "new_password": {
+                                    "description": "User Password, must be at least 8characters",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "old_password",
+                                "new_password"
+                            ]
+                        }
+                    }
+                ],
+                "description": "An endpoint for changing password.",
+                "summary": "An endpoint for changing password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            },
+            "patch": {
+                "operationId": "change_password_partial_update",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "old_password": {
+                                    "description": "User Password, must be at least 8characters",
+                                    "type": "string"
+                                },
+                                "new_password": {
+                                    "description": "User Password, must be at least 8characters",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "description": "An endpoint for changing password.",
+                "summary": "An endpoint for changing password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/password_reset/": {
+            "post": {
+                "operationId": "password_reset_create",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "description": "",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "email"
+                            ]
+                        }
+                    }
+                ],
+                "description": "An Api View which provides a method to request a password reset token based on an e-mail address\n\nSends a signal reset_password_token_created when a reset token was created",
+                "summary": "An Api View which provides a method to request a password reset token based on an e-mail address",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/password_reset/confirm/": {
+            "post": {
+                "operationId": "password_reset_confirm_create",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "password": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "token": {
+                                    "description": "",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "password",
+                                "token"
+                            ]
+                        }
+                    }
+                ],
+                "description": "An Api View which provides a method to reset a password based on a unique token",
+                "summary": "An Api View which provides a method to reset a password based on a unique token",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/refill/": {
+            "get": {
+                "operationId": "refill_list",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Return a list of all users deposits.",
+                "summary": "Return a list of all users deposits.",
+                "tags": [
+                    "api"
+                ]
+            },
+            "post": {
+                "operationId": "refill_create",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "amount": {
+                                    "description": "",
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "amount"
+                            ]
+                        }
+                    }
+                ],
+                "description": "Make a new deposit.",
+                "summary": "Make a new deposit.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/refill/{id}/": {
+            "get": {
+                "operationId": "refill_read",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "A unique integer value identifying this refill.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Return the given deposit",
+                "summary": "Return the given deposit",
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/token/": {
+            "post": {
+                "operationId": "token_create",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "description": "",
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "description": "",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "email",
+                                "password"
+                            ]
+                        }
+                    }
+                ],
+                "description": "Takes a set of user credentials and returns an access and refresh JSON web\ntoken pair to prove the authentication of those credentials.",
+                "summary": "Takes a set of user credentials and returns an access and refresh JSON web",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/token/refresh/": {
+            "post": {
+                "operationId": "token_refresh_create",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "refresh": {
+                                    "description": "",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "refresh"
+                            ]
+                        }
+                    }
+                ],
+                "description": "Takes a refresh type JSON web token and returns an access type JSON web\ntoken if the refresh token is valid.",
+                "summary": "Takes a refresh type JSON web token and returns an access type JSON web",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/user/": {
+            "get": {
+                "operationId": "user_list",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Return a list of all Users if Admin User.",
+                "summary": "Return a list of all Users if Admin User.",
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/api/user/{id}/": {
+            "get": {
+                "operationId": "user_read",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "A unique integer value identifying this user.",
+                        "type": "integer"
+                    }
+                ],
+                "description": "Return the User matching the Id.",
+                "summary": "Return the User matching the Id.",
+                "tags": [
+                    "api"
+                ]
+            }
+        },
+        "/register/": {
+            "post": {
+                "operationId": "create",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "full_name": {
+                                    "description": "Full name of the User",
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "description": "User Email Address. Required in email format",
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "description": "User Password, must be at least 8characters",
+                                    "type": "string"
+                                },
+                                "confirm_password": {
+                                    "description": "Re-enter password for confirmation",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "full_name",
+                                "email",
+                                "password",
+                                "confirm_password"
+                            ]
+                        }
+                    }
+                ],
+                "description": "New User registration Form",
+                "summary": "New User registration Form",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "register"
+                ]
+            }
+        }
+    },
+    "securityDefinitions": {
+        "basic": {
+            "type": "basic"
+        }
+    }
+}

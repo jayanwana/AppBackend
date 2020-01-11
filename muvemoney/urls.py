@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt import views as jwt_views
 from . import views
 from .router import router
-from accounts.api.viewsets import UserRegistrationAPIView
+from accounts.api.viewsets import UserRegistrationAPIView, UpdatePassword
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
@@ -33,10 +33,8 @@ urlpatterns = [
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/password_reset/', include('django_rest_passwordreset.urls'), name='password_reset'),
-    # path('', views.HomePage.as_view(), name='home'),
+    path('api/change_password/', UpdatePassword.as_view(), name='change_password')
     # path('groups/', include('groups.urls', namespace='groups')),
-    # path('accounts/', include('accounts.urls', namespace='accounts')),
-    # path('bank/', include('bank.urls', namespace='bank')),
 ] + static(settings.STATIC_URL)
 
 

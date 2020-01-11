@@ -62,6 +62,9 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 
 @receiver(post_password_reset)
 def password_reset_confirm(user, *args, **kwargs):
-    send_mail('Muve Password reset',
-              f'Dear {user.full_name}, your password reset was successful',
-              settings.EMAIL_HOST_USER, [user.email])
+    try:
+        send_mail('Muve Password reset',
+                  f'Dear {user.full_name}, your password reset was successful',
+                  settings.EMAIL_HOST_USER, [user.email])
+    except smtplib.SMTPAuthenticationError:
+        pass
