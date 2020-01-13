@@ -7,10 +7,10 @@ from django.conf import settings
 import logging.config
 import logging
 
-logging.config.dictConfig(settings.LOGGING)
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+logging.config.dictConfig(settings.LOGGING)
 
 
 @receiver(post_save, sender=CashCall)

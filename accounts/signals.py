@@ -10,8 +10,17 @@ from django.urls import reverse
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_user_balance(sender, instance, created, **kwargs):
+    """
+    Create a new user balance object whenever a new user is created
+    :param sender: User model
+    :param instance: an instance of the user model that is being saved
+    :param created: bool. If a new user is being created
+    :param kwargs: extra keyword arguments
+    :return: None
+    """
     if created:
+        # If a new user, create a user balance for user.
         UserBalance.objects.create(user=instance)
         try:
             send_mail('Welcome to Muve',
@@ -26,7 +35,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     """
     Handles password reset tokens
     When a token is created, an e-mail needs to be sent to the user
-    :param sender: View Class that sent the signal
+    :param sender: Password reset View
     :param instance: View Instance that sent the signal
     :param reset_password_token: Token Model Object
     :param args:
