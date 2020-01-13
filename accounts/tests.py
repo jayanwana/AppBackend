@@ -1,3 +1,98 @@
 from django.test import TestCase
+from rest_framework import status
+from rest_framework.test import APITestCase
+from django.urls import reverse
+from rest_framework.test import APIClient
+from accounts.models import User, UserAddress
+from django.contrib.auth.hashers import make_password
 
 # Create your tests here.
+
+
+class AccountsTests(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create(
+            full_name="Test User",
+            email="testuser@email.com",
+            password=make_password("testpassword"),
+            )
+        self.user.save()
+        self.post_data = {
+            "email": "testuser@email.com",
+            "password": "testpassword"
+        }
+
+    def auth(self, path, data=None):
+        response = self.client.post("/api/token/", self.post_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.access_token = response.json()['access']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+        if data is None:
+            response = self.client.get(f'/api/{path}/')
+        else:
+            response = self.client.post(f'/api/{path}/', data)
+        return response
+
+    def test_create_account(self):
+        """
+        Ensure we can create a new user object.
+        """
+        url = reverse('register_user')
+        data = {
+            "full_name": "Test User3",
+            "email": "testuser3@email.com",
+            "password": "testpassword",
+            "confirm_password": "testpassword"
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.id = response.json()['id']
+        self.assertEqual(User.objects.count(), 2)
+        self.assertEqual(User.objects.get(pk=self.id).full_name, "Test User3")
+        self.assertEqual(User.objects.get(pk=self.id).email, "testuser3@email.com")
+
+    def test_user_authentication(self):
+        response = self.client.post("/api/token/", self.post_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, 'access')
+        self.assertContains(response, 'refresh')
+        self.access_token = response.json()['access']
+
+    def test_invalid_user_authentication(self):
+        post_data = {
+            "email": "wronguser@email.com",
+            "password": "wrongpassword"
+        }
+        response = self.client.post("/api/token/", post_data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEquals(response.json(), {'detail': 'The Email and Password combination is incorrect'})
+
+    def test_user_detail(self):
+        response = self.auth('user')
+        self.date_joined = response.json()["results"][0]["date_joined"]  # Timezone conversion issues require this fix
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(response.json()['count'], 1)
+        self.assertEquals(response.json()['results'],
+                          [{'url': f'http://testserver/api/user/{self.user.id}/',
+                            'id': self.user.id,
+                            'email': 'testuser@email.com',
+                            'full_name': 'Test User', 'user_balance': 0.0,
+                            'date_joined': self.date_joined,
+                            'refill': [], 'cash_call': []}])
+
+    def test_address_create(self):
+        data = {
+            "street_address": "test address",
+            "city": "test city",
+            "state": "test state",
+            "country": "test country"
+        }
+        response = self.auth('address', data)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        self.user_address = UserAddress.objects.get(user=self.user)
+        self.assertEquals(self.user_address.street_address, 'test address')
+        self.assertEquals(self.user_address.city, 'test city')
+        self.assertEquals(self.user_address.state, 'test state')
+        self.assertEquals(self.user_address.country, 'test country')
