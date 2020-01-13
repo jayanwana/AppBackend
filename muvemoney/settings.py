@@ -29,6 +29,8 @@ with open('secrets.txt') as f:
     secret_key = content[0].strip()
     user = content[1].strip()
     password = content[2].strip()
+    host_user = content[3].strip()
+    host_user_password = content[4].strip()
     SECRET_KEY = secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -146,7 +148,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 LOGGING = {
@@ -198,8 +201,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'muveapi@gmail.com'
-EMAIL_HOST_PASSWORD = 'muveadminpassword'
+EMAIL_HOST_USER = host_user
+EMAIL_HOST_PASSWORD = host_user_password
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
