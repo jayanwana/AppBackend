@@ -340,8 +340,8 @@
             "put": {
                 "operationId": "change_password_update",
                 "responses": {
-                    "200": {
-                        "description": ""
+                    "204": {
+                        "description": "NO CONTENT"
                     }
                 },
                 "parameters": [
