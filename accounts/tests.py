@@ -24,13 +24,24 @@ class AccountsTests(APITestCase):
             "password": "testpassword"
         }
 
-    def auth(self, path, data=None):
+    def auth(self, path, data=None, put=False):
+        """
+        Generate access token, Handle authorization and Generate response object
+        :param path: API path for response object eg /api/path/
+        :param data: Dict object for POST requests
+        :param put: Bool. if request method is put
+        :return:
+        """
         response = self.client.post("/api/token/", self.post_data)
+        if response.status_code != status.HTTP_200_OK:
+            return response
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.access_token = response.json()['access']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         if data is None:
             response = self.client.get(f'/api/{path}/')
+        elif put:
+            response = self.client.put(f'/api/{path}/', data)
         else:
             response = self.client.post(f'/api/{path}/', data)
         return response
@@ -96,3 +107,19 @@ class AccountsTests(APITestCase):
         self.assertEquals(self.user_address.city, 'test city')
         self.assertEquals(self.user_address.state, 'test state')
         self.assertEquals(self.user_address.country, 'test country')
+
+    def test_password_change(self):
+        data = {
+            "old_password": 'testpassword',
+            "new_password": 'newtestpassword'
+        }
+        response = self.auth('change_password', data, put=True)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.auth('user')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.post_data = {
+            "email": "testuser@email.com",
+            "password": 'newtestpassword'
+        }
+        response = self.auth('user')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
