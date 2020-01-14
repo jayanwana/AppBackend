@@ -33,7 +33,8 @@ urlpatterns = [
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/password_reset/', include('django_rest_passwordreset.urls'), name='password_reset'),
-    path('api/change_password/', UpdatePassword.as_view(), name='change_password')
+    path('api/change_password/', UpdatePassword.as_view(), name='change_password'),
+    path("paystack", include(('paystack.urls', 'paystack'), namespace='paystack')),
     # path('groups/', include('groups.urls', namespace='groups')),
 ] + static(settings.STATIC_URL)
 
