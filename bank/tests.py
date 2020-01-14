@@ -1,7 +1,6 @@
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
 from rest_framework.test import APIClient
 from accounts.models import User, UserAddress
 from django.contrib.auth.hashers import make_password
@@ -12,6 +11,10 @@ from django.contrib.auth.hashers import make_password
 class BankTests(APITestCase):
 
     def setUp(self):
+        """
+        Set up test User and Client
+        :return:
+        """
         self.client = APIClient()
         self.user = User.objects.create(
             full_name="Test User",
@@ -19,6 +22,14 @@ class BankTests(APITestCase):
             password=make_password("testpassword"),
             )
         self.user.save()
+        self.address = UserAddress.objects.create(
+            user=self.user,
+            street_address="test address",
+            city="test city",
+            state="test state",
+            country="test country"
+            )
+        self.address.save()
         self.post_data = {
             "email": "testuser@email.com",
             "password": "testpassword"
@@ -42,10 +53,15 @@ class BankTests(APITestCase):
         return response
 
     def test_balance(self):
+        """Ensure User Balance is correct"""
         response = self.auth('user')
         self.assertEquals(response.json()['results'][0]['user_balance'], self.user.user_balance.get().balance)
 
     def test_refill(self):
+        """
+        Ensure deposits work as intended
+        :return:
+        """
         amount = 5000.00
         response = self.auth('refill', data={'amount': amount})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -62,12 +78,20 @@ class BankTests(APITestCase):
         self.assertEquals(len(response.json()['results'][0]), 6)
 
     def test_cash_call_below_balance(self):
+        """
+        Ensure User cannot withdraw more than their available balance
+        :return:
+        """
         amount = 5000.00
         response = self.auth('cash_call', data={'amount': amount})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertDictEqual(response.json(), {'amount': ['You Can Not Withdraw More Than Your Balance.']})
 
     def test_cash_call(self):
+        """
+        Ensure withdrawal works as intended
+        :return:
+        """
         amount = 50000.00
         response = self.auth('refill', data={'amount': amount})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -79,4 +103,25 @@ class BankTests(APITestCase):
         self.assertAlmostEqual(float(response.json()['current_balance']),
                                float(response.json()['previous_balance']) - amount)
 
-
+    def test_cash_call_with_address(self):
+        """
+                Ensure withdrawal works as intended
+                :return:
+                """
+        amount = 50000.00
+        response = self.auth('refill', data={'amount': amount})
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        amount = 5000.00
+        response = self.auth('cash_call',
+                             data={
+                                 'amount': amount,
+                                 'address': f'http://testserver/api/address/{self.user.address.get().pk}/'
+                             })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEquals(float(response.json()['current_balance']),
+                          self.user.user_balance.get().balance)
+        self.assertAlmostEqual(float(response.json()['current_balance']),
+                               float(response.json()['previous_balance']) - amount)
+        response = self.auth('cash_call')
+        self.assertEquals(response.json()['results'][0]['address'],
+                          f'http://testserver/api/address/{self.user.address.get().pk}/')

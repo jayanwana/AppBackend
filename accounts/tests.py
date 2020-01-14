@@ -12,6 +12,10 @@ from django.contrib.auth.hashers import make_password
 class AccountsTests(APITestCase):
 
     def setUp(self):
+        """
+        Initialize test User and test client
+        :return:
+        """
         self.client = APIClient()
         self.user = User.objects.create(
             full_name="Test User",
@@ -65,6 +69,9 @@ class AccountsTests(APITestCase):
         self.assertEqual(User.objects.get(pk=self.id).email, "testuser3@email.com")
 
     def test_user_authentication(self):
+        """
+        Ensure user authentication works
+        """
         response = self.client.post("/api/token/", self.post_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, 'access')
@@ -72,6 +79,10 @@ class AccountsTests(APITestCase):
         self.access_token = response.json()['access']
 
     def test_invalid_user_authentication(self):
+        """
+        Ensure invalid auth details are rejected
+        :return:
+        """
         post_data = {
             "email": "wronguser@email.com",
             "password": "wrongpassword"
@@ -81,6 +92,9 @@ class AccountsTests(APITestCase):
         self.assertEquals(response.json(), {'detail': 'The Email and Password combination is incorrect'})
 
     def test_user_detail(self):
+        """
+        Ensure a User can access its correct details
+        """
         response = self.auth('user')
         self.date_joined = response.json()["results"][0]["date_joined"]  # Timezone conversion issues require this fix
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -88,12 +102,15 @@ class AccountsTests(APITestCase):
         self.assertEquals(response.json()['results'],
                           [{'url': f'http://testserver/api/user/{self.user.id}/',
                             'id': self.user.id,
-                            'email': 'testuser@email.com',
-                            'full_name': 'Test User', 'user_balance': 0.0,
+                            'email': self.user.email,
+                            'full_name': self.user.full_name, 'user_balance': self.user.user_balance.get().balance,
                             'date_joined': self.date_joined,
                             'refill': [], 'cash_call': []}])
 
     def test_address_create(self):
+        """
+        Ensure we can add a user address
+        """
         data = {
             "street_address": "test address",
             "city": "test city",
@@ -109,6 +126,10 @@ class AccountsTests(APITestCase):
         self.assertEquals(self.user_address.country, 'test country')
 
     def test_password_change(self):
+        """
+        Ensure change password works as intended
+        :return:
+        """
         data = {
             "old_password": 'testpassword',
             "new_password": 'newtestpassword'
@@ -123,3 +144,16 @@ class AccountsTests(APITestCase):
         }
         response = self.auth('user')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_invalid_password_change(self):
+        """
+        Ensure password cannot be changed with invalid details
+        :return:
+        """
+        data = {
+            "old_password": 'wrongpassword',
+            "new_password": 'newtestpassword'
+        }
+        response = self.auth('change_password', data, put=True)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertDictEqual(response.json(), {"old_password": ["Wrong password."]})
