@@ -32,6 +32,8 @@ with open('secrets.txt') as f:
     host_user = content[3].strip()
     host_user_password = content[4].strip()
     SECRET_KEY = secret_key
+    PAYSTACK_PUBLIC_KEY = content[5].strip()
+    PAYSTACK_SECRET_KEY = content[6].strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -57,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'django_rest_passwordreset',
     'corsheaders',
+    'paystack',
     # My Apps
     'accounts',
     'bank',
