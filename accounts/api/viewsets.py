@@ -53,18 +53,18 @@ class UpdatePassword(generics.UpdateAPIView):
         return self.request.user
 
     def put(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        user = self.get_object()
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
             # Check old password
             old_password = serializer.validated_data.get("old_password")
-            if not self.object.check_password(str(old_password)):
+            if not user.check_password(str(old_password)):
                 return Response({"old_password": ["Wrong password."]},
                                 status=status.HTTP_400_BAD_REQUEST)
             # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.validated_data.get("new_password"))
-            self.object.save()
+            user.set_password(serializer.validated_data.get("new_password"))
+            user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
