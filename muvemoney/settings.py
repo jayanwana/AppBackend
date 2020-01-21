@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+if os.name == 'nt':
+    OSGEO4W = r"C:\Users\user\PycharmProjects\django\venv\Lib\site-packages\osgeo"
+    assert os.path.isdir(OSGEO4W), "Directory does not exist: " + OSGEO4W
+    os.environ['OSGEO4W_ROOT'] = OSGEO4W
+    os.environ['GDAL_DATA'] = OSGEO4W + r"\data\gdal"
+    os.environ['PROJ_LIB'] = OSGEO4W + r"\data\proj"
+GDAL_LIBRARY_PATH = r"C:\Users\user\PycharmProjects\django\venv\Lib\site-packages\osgeo\gdal204.dll"
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,7 +47,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["muve.com.ng", "api.muve.com.ng", "localhost", "127.0.0.1"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,7 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.gis',
+    'django.contrib.gis',
     # 3rd party
     'debug_toolbar',
     'bootstrap4',
