@@ -7,6 +7,33 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django_rest_passwordreset.signals import reset_password_token_created, post_password_reset
 from django.urls import reverse
+from django.conf import settings
+from pypaystack import Customer
+
+
+@receiver(post_save, sender=User)
+def initiate_paystack_customer(sender, instance, created, **kwargs):
+    """
+    Create an instance of the paystack customer class whenever a new user is created
+    :param sender: User model
+    :param instance: an instance of the user model that is being saved
+    :param created: bool. If a new user is being created
+    :param kwargs: extra keyword arguments
+    :return: None
+    """
+    full_name = str(instance.full_name)
+    if created and not full_name.startswith('Test'):
+        full_name = full_name.split()
+        customer = Customer(settings.PAYSTACK_PUBLIC_KEY)
+        try:
+            response = customer.create(instance.email, full_name[0],
+                                       full_name[1], instance.phone_number)  # Add new customer
+            instance.paystack_costumer_id = response[3]['id']
+            instance.save()
+        except Exception as e:
+            print(e)
+        except ConnectionError as e:
+            print(e)
 
 
 @receiver(post_save, sender=User)

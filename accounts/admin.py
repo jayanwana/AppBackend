@@ -24,6 +24,7 @@ class UserAdmin(DjangoUserAdmin):
     )
     list_display = ('email', 'full_name', 'is_staff')
     search_fields = ('email', 'full_name')
+    exclude = ('paystack_authorization_code',)
     ordering = ('email',)
 
 
