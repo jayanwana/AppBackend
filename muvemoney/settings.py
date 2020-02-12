@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
 if os.name == 'nt':
     OSGEO4W = r"C:\Users\user\PycharmProjects\django\venv\Lib\site-packages\osgeo"
     assert os.path.isdir(OSGEO4W), "Directory does not exist: " + OSGEO4W
@@ -41,6 +42,7 @@ with open('secrets.txt') as f:
     SECRET_KEY = secret_key
     PAYSTACK_PUBLIC_KEY = content[5].strip()
     PAYSTACK_SECRET_KEY = content[6].strip()
+    ip_stack_api_key = content[7].strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -66,9 +68,11 @@ INSTALLED_APPS = [
     'django_rest_passwordreset',
     'corsheaders',
     'paystack',
+    'floppyforms',
     # My Apps
     'accounts',
     'bank',
+    'location',
 ]
 
 MIDDLEWARE = [
@@ -111,7 +115,7 @@ WSGI_APPLICATION = 'muvemoney.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'muve_db',
         'USER': user,
         'PASSWORD': password,
@@ -159,6 +163,32 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
 LOGGING = {
