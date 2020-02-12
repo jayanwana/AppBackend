@@ -5,18 +5,23 @@ cffi==1.13.2
 Django==2.2.8
 django-bootstrap4==1.0.1
 django-braces==1.13.0
+django-cors-headers==3.2.1
 django-debug-toolbar==2.1
 django-extensions==2.2.5
+-e git+https://github.com/gbozee/django-paystack.git@fd2d44767e4c3531add523181eda8001c5ef6170#egg=django_paystack
 django-widget-tweaks==1.4.5
 djangorestframework==3.10.3
 djangorestframework-simplejwt==4.3.0
-django-cors-headers==3.2.1
+django-rest-passwordreset==1.0.0
 django-rest-swagger==2.2.0
 importlib-metadata==1.1.0
+Jinja2==2.10.3
+jsonschema==3.2.0
 Markdown==3.1.1
 more-itertools==8.0.0
 openapi==1.1.0
 Pillow==6.2.1
+psycopg2==2.8.4
 pycparser==2.19
 pyrsistent==0.15.6
 python-dateutil==2.8.1

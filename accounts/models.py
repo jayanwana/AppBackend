@@ -4,6 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.core.validators import RegexValidator
 # Create your accounts models here.
 
 
@@ -45,11 +46,19 @@ class User(AbstractBaseUser, PermissionsMixin):
     """User model."""
     email = models.EmailField(_('email address'), unique=True)
     full_name = models.CharField(_('full name'), max_length=64, blank=True)
+    phone_regex = RegexValidator(regex=r'^s*[0][7-9]\d{9,11}$',
+                                 message="Phone number must be entered in the format: '08012345678'. "
+                                         "11 digits allowed.")
+    phone_number = models.CharField(_('phone number'), validators=[phone_regex],
+                                    unique=True, max_length=11, blank=True, null=True)
+    paystack_costumer_id = models.IntegerField(_('Paystack costumer Id'), unique=True, blank=True, null=True)
+    paystack_authorization_code = models.CharField(max_length=16, blank=True, null=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     is_staff = models.BooleanField(_('is staff'), default=False)
     is_superuser = models.BooleanField(_('is superuser'), default=False)
+    is_agent = models.BooleanField(_('is agent'), default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -67,7 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     @cached_property
     def balance(self):
         if hasattr(self, 'user_balance'):
-            return self.user_balance.balance
+            return self.user_balance.get().balance
         return None
 
 

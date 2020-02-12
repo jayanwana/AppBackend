@@ -26,12 +26,13 @@ class RefillSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Refill
-        fields = ['url', 'id', 'amount', 'user', 'previous_balance', 'current_balance', 'date_deposited']
-        read_only_fields = ['id', 'user', 'previous_balance', 'current_balance', 'date_deposited']
+        fields = ['url', 'id', 'amount', 'user', 'previous_balance',
+                  'current_balance', 'date_deposited', 'verified']
+        read_only_fields = ['id', 'user', 'previous_balance',
+                            'current_balance', 'date_deposited', 'verified']
 
 
 class CashCallSerializer(serializers.HyperlinkedModelSerializer, ChoicesMetadata):
-    # user_address =
     user = serializers.HiddenField(
         default=serializers.CurrentUserDefault(),
     )
@@ -42,6 +43,25 @@ class CashCallSerializer(serializers.HyperlinkedModelSerializer, ChoicesMetadata
         fields = ['url', 'id', 'amount', 'address', 'user', 'previous_balance', 'current_balance', 'date_deposited']
         read_only_fields = ['id', 'user', 'previous_balance', 'current_balance', 'date_deposited']
         extra_choice_fields = ['address']
+
+    # def validate(self, attrs):
+    #     user = None
+    #     request = self.context.get("request")
+    #     if request and hasattr(request, "user"):
+    #         user = request.user
+    #         if user
+
+    def validate_address(self, value):
+        if value:
+            request = self.context.get("request")
+            if request and hasattr(request, "user"):
+                user = request.user
+                address_list = user.address.all()
+                if value not in address_list:
+                    raise serializers.ValidationError(
+                        'Address does not match User.'
+                    )
+        return value
 
     def validate_amount(self, value):
         user = None

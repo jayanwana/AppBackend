@@ -1,8 +1,9 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
-from .serializers import UserSerializer, UserRegistrationSerializer, UserAddressSerializer
+from .serializers import (UserSerializer, UserRegistrationSerializer,
+                          UserAddressSerializer, ChangePasswordSerializer)
 from accounts.models import User, UserAddress
 
 
@@ -40,7 +41,36 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             return self.queryset.filter(id=self.request.user.id)
 
 
-class UserRegistrationAPIView(viewsets.generics.CreateAPIView):
+class UpdatePassword(generics.UpdateAPIView):
+    """
+    An endpoint for changing password.
+    """
+    permission_classes = (IsAuthenticated, )
+    serializer_class = ChangePasswordSerializer
+    http_method_names = ['put']
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            old_password = serializer.validated_data.get("old_password")
+            if not user.check_password(str(old_password)):
+                return Response({"old_password": ["Wrong password."]},
+                                status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            user.set_password(serializer.validated_data.get("new_password"))
+            user.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserRegistrationAPIView(generics.CreateAPIView):
     """
     User Registration Form API View. Creates new instances of the User model
     """

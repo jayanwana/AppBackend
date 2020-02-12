@@ -1,4 +1,8 @@
 *.pyc
-__pycache__ 
-db.sqlite3 
+.idea
+utils
+db.sqlite3
 secrets.txt
+debug.log
+.ssh
+migrations
