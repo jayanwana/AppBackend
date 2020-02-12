@@ -37,7 +37,7 @@ def balance_update(sender, instance, created, **kwargs):
         alert_type = "debited"
     else:
         alert_type = None
-    if instance.verified:
+    if (sender == Refill and instance.verified) or (sender == CashCall):
         try:
             if alert_type is not None:
                 message = f'Dear {instance.user.full_name},\n ' \
@@ -58,18 +58,19 @@ def balance_update(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Refill)
 def deposit_verify(sender, instance, created, **kwargs):
-    if instance.reference and not created and not instance.verified:
+    if instance.reference and created and not instance.verified:
         t = threading.Thread(target=deposit_verify_thread, args=[instance])
         t.setDaemon(True)
         t.start()
 
 
-def deposit_verify_thread(instance):
+def deposit_verify_thread(instance, test=False):
     paystack_transaction = Transaction(authorization_key=settings.PAYSTACK_PUBLIC_KEY)
     status = False
     count = 0
     while not status and count < 5:
-        time.sleep(60)
+        if not test:
+            time.sleep(60)
         response = paystack_transaction.verify(instance.reference)
         print(response)
         if response[3]['status'] == 'success':

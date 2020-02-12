@@ -40,20 +40,26 @@ class RefillViewSet(viewsets.ModelViewSet):
             else:
                 response = transaction.initialize(user.email, int(amount))
                 url = response[3]['authorization_url']
-            self.perform_create(serializer)
-            refill = serializer.instance
-            refill = Refill.objects.get(pk=refill.pk)
-            balance = user.user_balance.get()
-            refill.previous_balance = balance.balance
-            balance.balance += refill.amount
-            refill.current_balance = balance.balance
-            refill.reference = response[3]['reference']
-            refill.save()
-            return Response(data=response[3])
+            self.perform_create(serializer, response)
+            data = serializer.data
+            data['paystack_response'] = response[3]
+            return Response(data=data, status=status.HTTP_201_CREATED)
 
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_create(self, serializer, response):
+        user = self.request.user
+        balance = user.user_balance.get()
+        previous_balance = balance.balance
+        balance.balance += serializer.validated_data.get('amount')
+        current_balance = balance.balance
+        reference = response[3]['reference']
+        serializer.save(user=user,
+                        previous_balance=previous_balance,
+                        current_balance=current_balance,
+                        reference=reference)
 
 
 class CashCallViewSet(viewsets.ModelViewSet):

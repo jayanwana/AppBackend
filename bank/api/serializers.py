@@ -63,8 +63,6 @@ class CashCallSerializer(serializers.HyperlinkedModelSerializer, ChoicesMetadata
                     )
         return value
 
-
-
     def validate_amount(self, value):
         user = None
         request = self.context.get("request")
