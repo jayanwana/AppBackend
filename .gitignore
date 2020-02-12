@@ -1,5 +1,6 @@
 *.pyc
 .idea
+utils
 db.sqlite3
 secrets.txt
 debug.log
