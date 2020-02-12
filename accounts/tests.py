@@ -20,6 +20,7 @@ class AccountsTests(APITestCase):
         self.user = User.objects.create(
             full_name="Test User",
             email="testuser@email.com",
+            phone_number='08123456789',
             password=make_password("testpassword"),
             )
         self.user.save()
@@ -58,6 +59,7 @@ class AccountsTests(APITestCase):
         data = {
             "full_name": "Test User3",
             "email": "testuser3@email.com",
+            "phone_number": "07123456789",
             "password": "testpassword",
             "confirm_password": "testpassword"
         }
@@ -103,7 +105,9 @@ class AccountsTests(APITestCase):
                           [{'url': f'http://testserver/api/user/{self.user.id}/',
                             'id': self.user.id,
                             'email': self.user.email,
-                            'full_name': self.user.full_name, 'user_balance': self.user.user_balance.get().balance,
+                            'full_name': self.user.full_name,
+                            'phone_number': self.user.phone_number,
+                            'user_balance': self.user.user_balance.get().balance,
                             'date_joined': self.date_joined,
                             'refill': [], 'cash_call': []}])
 

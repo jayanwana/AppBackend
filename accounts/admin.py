@@ -13,7 +13,7 @@ class UserAdmin(DjangoUserAdmin):
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('full_name',)}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                       'groups', 'user_permissions')}),
+                                       'is_agent', 'groups', 'user_permissions', )}),
         (_('Important dates'), {'fields': ('last_login',)}),
     )
     add_fieldsets = (
@@ -22,12 +22,13 @@ class UserAdmin(DjangoUserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
-    list_display = ('email', 'full_name', 'is_staff')
+    list_display = ('email', 'full_name', 'is_agent', 'is_staff')
     search_fields = ('email', 'full_name')
     exclude = ('paystack_authorization_code',)
     ordering = ('email',)
 
 
+@admin.register(UserAddress)
 class AddressAdmin(admin.ModelAdmin):
 
     search_fields = ['user']
@@ -35,4 +36,3 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserBalance)
-admin.site.register(UserAddress, AddressAdmin)

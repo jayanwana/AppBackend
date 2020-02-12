@@ -7,7 +7,6 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django_rest_passwordreset.signals import reset_password_token_created, post_password_reset
 from django.urls import reverse
-from django.conf import settings
 from pypaystack import Customer
 
 

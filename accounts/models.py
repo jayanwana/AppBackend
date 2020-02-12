@@ -58,6 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     is_staff = models.BooleanField(_('is staff'), default=False)
     is_superuser = models.BooleanField(_('is superuser'), default=False)
+    is_agent = models.BooleanField(_('is agent'), default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
