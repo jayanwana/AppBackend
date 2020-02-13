@@ -7,13 +7,18 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializers import *
 
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def get_nearby_agents(request):
     """
     Get a list of nearby agents
     """
+    if request.method == 'GET':
+        serializer = AgentLocationSerializer()
+        return Response(serializer.data,
+                        status=status.HTTP_200_OK)
     if request.method == 'POST':
+        print(request.data)
         serializer = AgentLocationSerializer(data=request.data)
         if serializer.is_valid():
             # Get Data
