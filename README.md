@@ -11,7 +11,7 @@ Django Rest API for Muve Backend
 
 Open a Terminal or CMD, and clone the repository.
 ```
-git clone https://github.com/MuveWallet/AppBackend.git
+git clone https://github.com/jayanwana/AppBackend.git
 ```
 
 Enter the root directory.
