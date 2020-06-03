@@ -20,7 +20,7 @@ jsonschema==3.2.0
 Markdown==3.1.1
 more-itertools==8.0.0
 openapi==1.1.0
-Pillow==6.2.1
+Pillow>=6.2.2
 psycopg2==2.8.4
 pycparser==2.19
 pyrsistent==0.15.6
