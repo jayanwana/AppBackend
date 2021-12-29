@@ -10,7 +10,7 @@ django-debug-toolbar==2.1
 django-extensions==2.2.5
 -e git+https://github.com/gbozee/django-paystack.git@fd2d44767e4c3531add523181eda8001c5ef6170#egg=django_paystack
 django-widget-tweaks==1.4.5
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 djangorestframework-simplejwt==4.3.0
 django-rest-passwordreset==1.0.0
 django-rest-swagger==2.2.0
